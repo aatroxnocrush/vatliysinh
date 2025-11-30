@@ -70,11 +70,14 @@
 
     <style>
         /* Base Styles */
-        body { transition: background-color 0.5s ease, color 0.5s ease; cursor: none; /* Hide default cursor */ }
+        body { transition: background-color 0.5s ease, color 0.5s ease; cursor: auto; /* Default cursor for mobile */ }
+        @media (min-width: 768px) {
+            body { cursor: none; /* Hide cursor only on desktop */ }
+        }
         body.light { background-color: #F0F9FF; color: #1e293b; }
         html.dark body { background-color: #020617; color: #f8fafc; }
 
-        /* Custom Cursor */
+        /* Custom Cursor - Only visible on md+ screens */
         .cursor-dot, .cursor-outline {
             position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
             border-radius: 50%; z-index: 9999; pointer-events: none;
@@ -84,15 +87,13 @@
             width: 40px; height: 40px; border: 2px solid rgba(20, 184, 166, 0.5);
             transition: width 0.2s, height 0.2s, background-color 0.2s;
         }
-        /* Hover state for cursor */
         body.hovering .cursor-outline {
             width: 60px; height: 60px; background-color: rgba(20, 184, 166, 0.1); border-color: transparent;
         }
 
-        /* Glassmorphism - REMOVED BORDERS */
+        /* Glassmorphism */
         .glass {
             backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            /* Border removed here to fix the "white border" issue */
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
         .light .glass { background: rgba(255, 255, 255, 0.9); }
@@ -134,7 +135,7 @@
         }
         .card-shimmer:hover::before { left: 150%; transition: 0.7s; }
 
-        /* --- UPDATED: RAINBOW GLOW EFFECT (NO BORDER) --- */
+        /* Rainbow Glow */
         @keyframes rgb-glow {
             0% { box-shadow: 0 0 25px -5px rgba(255, 0, 0, 0.7); }
             15% { box-shadow: 0 0 25px -5px rgba(255, 165, 0, 0.7); }
@@ -145,12 +146,7 @@
             90% { box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.7); }
             100% { box-shadow: 0 0 25px -5px rgba(255, 0, 0, 0.7); }
         }
-
-        .rainbow-card {
-            transition: all 0.3s ease;
-            /* Border removed from here as well */
-        }
-
+        .rainbow-card { transition: all 0.3s ease; }
         .rainbow-card:hover {
             animation: rgb-glow 3s linear infinite;
             transform: translateY(-5px) scale(1.01);
@@ -172,7 +168,7 @@
         /* Interactive Components */
         .slider-container {
             position: relative; width: 100%; height: 280px; border-radius: 1rem; overflow: hidden;
-            cursor: none; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
         }
         .img-layer { position: absolute; inset: 0; background-size: cover; background-position: center; }
         .slider-handle {
@@ -202,7 +198,7 @@
         .btn-shine:hover::after { left: 100%; }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 6px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
@@ -211,7 +207,7 @@
 </head>
 <body class="light antialiased overflow-x-hidden relative">
 
-    <!-- Custom Cursor Elements -->
+    <!-- Custom Cursor Elements (Desktop Only) -->
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
 
@@ -230,13 +226,13 @@
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 top-0 p-4 transition-all duration-300">
-        <div class="max-w-7xl mx-auto glass rounded-2xl px-6 py-4 flex justify-between items-center shadow-lg">
+        <div class="max-w-7xl mx-auto glass rounded-2xl px-4 md:px-6 py-3 md:py-4 flex justify-between items-center shadow-lg">
             <!-- Logo -->
-            <a href="#" class="flex items-center gap-3 group magnetic-target" data-cursor="hover">
-                <div class="relative w-12 h-12 flex items-center justify-center bg-gradient-to-tr from-teal-500 to-blue-500 rounded-xl text-white shadow-lg group-hover:rotate-12 transition-transform">
-                    <i class="ph-bold ph-atom text-3xl animate-spin-slow"></i>
+            <a href="#" class="flex items-center gap-2 md:gap-3 group magnetic-target" data-cursor="hover">
+                <div class="relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-gradient-to-tr from-teal-500 to-blue-500 rounded-xl text-white shadow-lg group-hover:rotate-12 transition-transform">
+                    <i class="ph-bold ph-atom text-2xl md:text-3xl animate-spin-slow"></i>
                 </div>
-                <span class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-400 dark:to-blue-400">
+                <span class="text-xl md:text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-400 dark:to-blue-400">
                     BioPhysics<span class="hidden sm:inline"> Hub</span>
                 </span>
             </a>
@@ -251,15 +247,15 @@
             </div>
 
             <!-- Controls -->
-            <div class="flex items-center gap-4">
-                <button onclick="toggleAuthorModal()" class="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-slate-700 hover:bg-teal-50 dark:hover:bg-slate-600 text-sm font-bold shadow-md transition-all magnetic-btn text-slate-700 dark:text-white" data-cursor="hover">
-                    <i class="ph-bold ph-users text-lg"></i> Tác giả
+            <div class="flex items-center gap-3 md:gap-4">
+                <button onclick="toggleAuthorModal()" class="hidden sm:flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 rounded-full bg-white dark:bg-slate-700 hover:bg-teal-50 dark:hover:bg-slate-600 text-sm font-bold shadow-md transition-all magnetic-btn text-slate-700 dark:text-white" data-cursor="hover">
+                    <i class="ph-bold ph-users text-base md:text-lg"></i> <span class="hidden md:inline">Tác giả</span>
                 </button>
-                <button onclick="toggleTheme()" class="w-12 h-12 rounded-full flex items-center justify-center bg-white dark:bg-slate-700 hover:scale-110 transition-transform text-amber-500 shadow-md magnetic-btn" data-cursor="hover">
-                    <i class="ph-fill ph-sun text-xl dark:hidden"></i>
-                    <i class="ph-fill ph-moon text-xl hidden dark:block text-blue-300"></i>
+                <button onclick="toggleTheme()" class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-white dark:bg-slate-700 hover:scale-110 transition-transform text-amber-500 shadow-md magnetic-btn" data-cursor="hover">
+                    <i class="ph-fill ph-sun text-lg md:text-xl dark:hidden"></i>
+                    <i class="ph-fill ph-moon text-lg md:text-xl hidden dark:block text-blue-300"></i>
                 </button>
-                <button onclick="toggleMobileMenu()" class="lg:hidden text-3xl text-slate-700 dark:text-white magnetic-btn" data-cursor="hover">
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-2xl md:text-3xl text-slate-700 dark:text-white magnetic-btn" data-cursor="hover">
                     <i class="ph-bold ph-list"></i>
                 </button>
             </div>
@@ -278,28 +274,28 @@
     </div>
 
     <!-- Hero Section -->
-    <header class="min-h-screen flex items-center justify-center pt-32 px-4 relative pb-32">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
-            <div class="space-y-8 text-center md:text-left reveal">
-                <div class="inline-flex items-center gap-2 bg-white/90 dark:bg-slate-800/90 px-6 py-3 rounded-full text-teal-700 dark:text-teal-300 font-bold text-base shadow-md">
-                    <span class="w-3 h-3 rounded-full bg-teal-500 animate-pulse"></span>
+    <header class="min-h-screen flex items-center justify-center pt-24 md:pt-32 px-4 relative pb-20 md:pb-32">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
+            <div class="space-y-6 md:space-y-8 text-center md:text-left reveal">
+                <div class="inline-flex items-center gap-2 bg-white/90 dark:bg-slate-800/90 px-4 md:px-6 py-2 md:py-3 rounded-full text-teal-700 dark:text-teal-300 font-bold text-sm md:text-base shadow-md border border-teal-200 dark:border-slate-600">
+                    <span class="w-2 md:w-3 h-2 md:h-3 rounded-full bg-teal-500 animate-pulse"></span>
                     Khoa học liên ngành 4.0
                 </div>
                 
-                <h1 class="text-6xl lg:text-8xl font-extrabold leading-tight text-slate-900 dark:text-white tracking-tight">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold leading-tight text-slate-900 dark:text-white tracking-tight">
                     Vật Lí <span class="text-teal-500">&</span><br>
-                    <span id="typewriter-text" class="text-gradient-moving"></span><span class="animate-typewriter border-r-8 border-teal-500 ml-2"></span>
+                    <span id="typewriter-text" class="text-gradient-moving"></span><span class="animate-typewriter border-r-4 md:border-r-8 border-teal-500 ml-1 md:ml-2"></span>
                 </h1>
                 
-                <p class="text-xl lg:text-2xl text-slate-700 dark:text-slate-200 leading-relaxed font-semibold max-w-xl mx-auto md:mx-0">
+                <p class="text-lg md:text-xl lg:text-2xl text-slate-700 dark:text-slate-200 leading-relaxed font-semibold max-w-xl mx-auto md:mx-0">
                     Giải mã sự sống bằng quy luật vật lí. Nền tảng cho chẩn đoán chính xác và điều trị hiệu quả trong y học hiện đại.
                 </p>
                 
-                <div class="flex flex-wrap gap-6 justify-center md:justify-start pt-4">
-                    <a href="#scope" class="btn-shine px-10 py-5 bg-teal-600 text-white rounded-2xl font-bold text-xl shadow-xl shadow-teal-500/40 hover:-translate-y-1 transition-all flex items-center gap-3 magnetic-btn" data-cursor="hover">
+                <div class="flex flex-wrap gap-4 md:gap-6 justify-center md:justify-start pt-4">
+                    <a href="#scope" class="btn-shine px-8 md:px-10 py-4 md:py-5 bg-teal-600 text-white rounded-2xl font-bold text-lg md:text-xl shadow-xl shadow-teal-500/40 hover:-translate-y-1 transition-all flex items-center gap-3 magnetic-btn" data-cursor="hover">
                         <i class="ph-bold ph-rocket-launch"></i> Khám Phá
                     </a>
-                    <a href="#discussion" class="px-10 py-5 bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-2xl font-bold text-xl shadow-lg hover:-translate-y-1 transition-all magnetic-btn" data-cursor="hover">
+                    <a href="#discussion" class="px-8 md:px-10 py-4 md:py-5 bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-2xl font-bold text-lg md:text-xl shadow-lg border-2 border-slate-200 dark:border-slate-600 hover:-translate-y-1 transition-all magnetic-btn" data-cursor="hover">
                         Thảo Luận
                     </a>
                 </div>
@@ -307,77 +303,77 @@
 
             <!-- 3D Hero Illustration -->
             <div class="relative flex justify-center reveal" style="transition-delay: 200ms;">
-                <div class="relative w-96 h-96 md:w-[36rem] md:h-[36rem] animate-float">
+                <div class="relative w-80 h-80 md:w-96 md:h-96 lg:w-[36rem] lg:h-[36rem] animate-float">
                     <div class="absolute inset-0 border-4 border-dashed border-teal-400/40 rounded-full animate-spin-slow"></div>
                     <div class="absolute inset-16 border-4 border-purple-400/40 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="glass w-56 h-56 rounded-[2rem] flex items-center justify-center animate-pulse-glow bg-white/20" data-cursor="hover">
-                            <i class="ph-duotone ph-dna text-9xl text-teal-600 dark:text-teal-400 drop-shadow-2xl"></i>
+                        <div class="glass w-48 h-48 md:w-56 md:h-56 rounded-[2rem] flex items-center justify-center animate-pulse-glow bg-white/20" data-cursor="hover">
+                            <i class="ph-duotone ph-dna text-8xl md:text-9xl text-teal-600 dark:text-teal-400 drop-shadow-2xl"></i>
                         </div>
                     </div>
-                    <img src="bugcat.gif" class="absolute -bottom-8 left-0 w-40 animate-[bounce_3s_infinite] drop-shadow-2xl" alt="Mascot" onerror="this.src='https://media.tenor.com/3L9Ww_G_wQAAAAAi/bugcat-capoo.gif'">
-                    <div class="absolute top-0 right-10 bg-white/90 dark:bg-slate-800/90 p-4 rounded-2xl animate-float shadow-2xl"><i class="ph-fill ph-atom text-5xl text-blue-500"></i></div>
-                    <div class="absolute bottom-10 right-0 bg-white/90 dark:bg-slate-800/90 p-4 rounded-2xl animate-float shadow-2xl" style="animation-delay: 1.5s"><i class="ph-fill ph-heartbeat text-5xl text-red-500"></i></div>
+                    <img src="bugcat.gif" class="absolute -bottom-8 left-0 w-32 md:w-40 animate-[bounce_3s_infinite] drop-shadow-2xl" alt="Mascot" onerror="this.src='https://media.tenor.com/3L9Ww_G_wQAAAAAi/bugcat-capoo.gif'">
+                    <div class="absolute top-0 right-10 bg-white/90 dark:bg-slate-800/90 p-3 md:p-4 rounded-2xl animate-float shadow-2xl border border-white/20"><i class="ph-fill ph-atom text-4xl md:text-5xl text-blue-500"></i></div>
+                    <div class="absolute bottom-10 right-0 bg-white/90 dark:bg-slate-800/90 p-3 md:p-4 rounded-2xl animate-float shadow-2xl border border-white/20" style="animation-delay: 1.5s"><i class="ph-fill ph-heartbeat text-4xl md:text-5xl text-red-500"></i></div>
                 </div>
             </div>
         </div>
 
         <!-- Wave Divider -->
         <div class="w-full overflow-hidden leading-[0] rotate-180 text-white dark:text-slate-900 absolute bottom-0 left-0 z-0">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block h-[80px] w-[calc(100%+1.3px)] fill-current opacity-90">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block h-[50px] md:h-[80px] w-[calc(100%+1.3px)] fill-current opacity-90">
                 <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
             </svg>
         </div>
         
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-slate-500 dark:text-slate-400 z-20">
-            <i class="ph-bold ph-caret-down text-4xl"></i>
+        <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-slate-500 dark:text-slate-400 z-20">
+            <i class="ph-bold ph-caret-down text-3xl md:text-4xl"></i>
         </div>
     </header>
 
     <!-- I. KHÁI NIỆM -->
-    <section id="concept" class="py-32 px-4 relative z-10">
+    <section id="concept" class="py-16 md:py-32 px-4 relative z-10">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20 reveal">
-                <span class="text-teal-700 dark:text-teal-300 font-extrabold uppercase tracking-widest text-sm bg-teal-100 dark:bg-teal-900/50 px-4 py-2 rounded-full">Tổng quan</span>
-                <h2 class="text-5xl md:text-6xl font-extrabold mt-6 text-slate-900 dark:text-white leading-tight">Khái Niệm Vật Lí Y Sinh</h2>
+            <div class="text-center mb-12 md:mb-20 reveal">
+                <span class="text-teal-700 dark:text-teal-300 font-extrabold uppercase tracking-widest text-xs md:text-sm bg-teal-100 dark:bg-teal-900/50 px-3 md:px-4 py-1 md:py-2 rounded-full border border-teal-200 dark:border-teal-700">Tổng quan</span>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mt-4 md:mt-6 text-slate-900 dark:text-white leading-tight">Khái Niệm Vật Lí Y Sinh</h2>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
                 <div class="group relative reveal cursor-none" data-cursor="hover">
                     <div class="absolute -inset-3 bg-gradient-to-r from-teal-400 to-blue-500 rounded-[2.5rem] blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
-                    <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl">
+                    <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/50 dark:border-slate-700/50">
                         <img src="concept.png" alt="Sơ đồ khái niệm" class="w-full h-auto object-cover transform group-hover:scale-105 transition duration-700 bg-white" onerror="this.src='https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800'">
                     </div>
                 </div>
 
-                <div class="space-y-8 reveal" style="transition-delay: 200ms;">
-                    <div class="glass p-10 rounded-[2rem] shadow-xl">
-                        <p class="text-xl md:text-2xl text-slate-800 dark:text-slate-100 leading-relaxed font-semibold">
-                            Là ngành khoa học liên ngành, ứng dụng kiến thức và phương pháp của <strong class="text-teal-600 dark:text-teal-400 text-2xl md:text-3xl">Vật lí</strong> để nghiên cứu cơ thể sống và hỗ trợ <strong class="text-blue-600 dark:text-blue-400 text-2xl md:text-3xl">Y học</strong>. Tập trung giải thích hiện tượng trong tế bào, mô bằng quy luật: điện, cơ, quang, nhiệt, âm...
+                <div class="space-y-6 md:space-y-8 reveal" style="transition-delay: 200ms;">
+                    <div class="glass p-6 md:p-10 rounded-[2rem] shadow-xl">
+                        <p class="text-lg md:text-xl lg:text-2xl text-slate-800 dark:text-slate-100 leading-relaxed font-semibold">
+                            Là ngành khoa học liên ngành, ứng dụng kiến thức và phương pháp của <strong class="text-teal-600 dark:text-teal-400 text-xl md:text-2xl lg:text-3xl">Vật lí</strong> để nghiên cứu cơ thể sống và hỗ trợ <strong class="text-blue-600 dark:text-blue-400 text-xl md:text-2xl lg:text-3xl">Y học</strong>. Tập trung giải thích hiện tượng trong tế bào, mô bằng quy luật: điện, cơ, quang, nhiệt, âm...
                         </p>
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-2 gap-4 md:gap-6">
                         <!-- High Contrast Boxes with Rainbow Glow (No Border) -->
-                        <div class="bg-blue-50/90 dark:bg-blue-900/90 p-6 rounded-2xl hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors card-shimmer cursor-default shadow-lg rainbow-card">
-                            <i class="ph-fill ph-scan text-4xl text-blue-600 dark:text-blue-300 mb-3"></i>
-                            <h4 class="text-2xl font-extrabold text-slate-900 dark:text-white">Chẩn đoán</h4>
-                            <p class="text-lg text-slate-700 dark:text-blue-100 mt-2 font-bold">X-quang, MRI, CT...</p>
+                        <div class="bg-blue-50/90 dark:bg-blue-900/90 p-4 md:p-6 rounded-2xl hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors card-shimmer cursor-default shadow-lg rainbow-card">
+                            <i class="ph-fill ph-scan text-3xl md:text-4xl text-blue-600 dark:text-blue-300 mb-2 md:mb-3"></i>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">Chẩn đoán</h4>
+                            <p class="text-base md:text-lg text-slate-700 dark:text-blue-100 mt-1 md:mt-2 font-bold">X-quang, MRI, CT...</p>
                         </div>
-                        <div class="bg-green-50/90 dark:bg-green-900/90 p-6 rounded-2xl hover:bg-green-100 dark:hover:bg-green-800 transition-colors card-shimmer cursor-default shadow-lg rainbow-card">
-                            <i class="ph-fill ph-first-aid-kit text-4xl text-green-600 dark:text-green-300 mb-3"></i>
-                            <h4 class="text-2xl font-extrabold text-slate-900 dark:text-white">Điều trị</h4>
-                            <p class="text-lg text-slate-700 dark:text-green-100 mt-2 font-bold">Laser, Xạ trị...</p>
+                        <div class="bg-green-50/90 dark:bg-green-900/90 p-4 md:p-6 rounded-2xl hover:bg-green-100 dark:hover:bg-green-800 transition-colors card-shimmer cursor-default shadow-lg rainbow-card">
+                            <i class="ph-fill ph-first-aid-kit text-3xl md:text-4xl text-green-600 dark:text-green-300 mb-2 md:mb-3"></i>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">Điều trị</h4>
+                            <p class="text-base md:text-lg text-slate-700 dark:text-green-100 mt-1 md:mt-2 font-bold">Laser, Xạ trị...</p>
                         </div>
-                        <div class="bg-purple-50/90 dark:bg-purple-900/90 p-6 rounded-2xl hover:bg-purple-100 dark:hover:bg-purple-800 transition-colors card-shimmer cursor-default shadow-lg rainbow-card">
-                            <i class="ph-fill ph-chart-line-up text-4xl text-purple-600 dark:text-purple-300 mb-3"></i>
-                            <h4 class="text-2xl font-extrabold text-slate-900 dark:text-white">Theo dõi</h4>
-                            <p class="text-lg text-slate-700 dark:text-purple-100 mt-2 font-bold">ECG, EEG, EMG...</p>
+                        <div class="bg-purple-50/90 dark:bg-purple-900/90 p-4 md:p-6 rounded-2xl hover:bg-purple-100 dark:hover:bg-purple-800 transition-colors card-shimmer cursor-default shadow-lg rainbow-card">
+                            <i class="ph-fill ph-chart-line-up text-3xl md:text-4xl text-purple-600 dark:text-purple-300 mb-2 md:mb-3"></i>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">Theo dõi</h4>
+                            <p class="text-base md:text-lg text-slate-700 dark:text-purple-100 mt-1 md:mt-2 font-bold">ECG, EEG, EMG...</p>
                         </div>
-                        <div class="bg-orange-50/90 dark:bg-orange-900/90 p-6 rounded-2xl hover:bg-orange-100 dark:hover:bg-orange-800 transition-colors card-shimmer cursor-default shadow-lg rainbow-card">
-                            <i class="ph-fill ph-wrench text-4xl text-orange-600 dark:text-orange-300 mb-3"></i>
-                            <h4 class="text-2xl font-extrabold text-slate-900 dark:text-white">Thiết bị</h4>
-                            <p class="text-lg text-slate-700 dark:text-orange-100 mt-2 font-bold">Cảm biến, Máy thở...</p>
+                        <div class="bg-orange-50/90 dark:bg-orange-900/90 p-4 md:p-6 rounded-2xl hover:bg-orange-100 dark:hover:bg-orange-800 transition-colors card-shimmer cursor-default shadow-lg rainbow-card">
+                            <i class="ph-fill ph-wrench text-3xl md:text-4xl text-orange-600 dark:text-orange-300 mb-2 md:mb-3"></i>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">Thiết bị</h4>
+                            <p class="text-base md:text-lg text-slate-700 dark:text-orange-100 mt-1 md:mt-2 font-bold">Cảm biến, Máy thở...</p>
                         </div>
                     </div>
                 </div>
@@ -386,24 +382,24 @@
     </section>
 
     <!-- II. PHẠM VI (Enhanced Cards with Detailed Content) -->
-    <section id="scope" class="py-32 px-4 bg-white/80 dark:bg-slate-800/80 rounded-[4rem] mx-4 shadow-2xl backdrop-blur-md">
+    <section id="scope" class="py-16 md:py-32 px-4 bg-white/80 dark:bg-slate-800/80 rounded-[3rem] md:rounded-[4rem] mx-2 md:mx-4 shadow-2xl backdrop-blur-md">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20 reveal">
+            <div class="text-center mb-12 md:mb-20 reveal">
                 <span class="bg-teal-700 text-white font-bold py-1 px-3 rounded-full text-sm uppercase tracking-wider mb-2 inline-block">Nội dung cốt lõi</span>
-                <h2 class="text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white flex items-center justify-center gap-3">
+                <h2 class="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white flex items-center justify-center gap-3">
                     4 Trụ Cột Nghiên Cứu <i class="ph-fill ph-bank"></i>
                 </h2>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <!-- Card 1: Cơ Chế Vật Lí -->
                 <div class="tilt-card group h-full reveal rainbow-card" data-cursor="hover">
-                    <div class="bg-white/95 dark:bg-slate-900/95 p-8 rounded-[2rem] shadow-xl border-l-8 border-pink-500 h-full relative overflow-hidden card-shimmer">
+                    <div class="bg-white/95 dark:bg-slate-900/95 p-6 md:p-8 rounded-[2rem] shadow-xl border-l-8 border-pink-500 h-full relative overflow-hidden card-shimmer">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900/50 rounded-full flex items-center justify-center text-pink-600 dark:text-pink-400 text-2xl"><i class="ph-fill ph-heartbeat"></i></div>
-                            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">1. Cơ Chế Vật Lí Cơ Thể</h3>
+                            <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">1. Cơ Chế Vật Lí Cơ Thể</h3>
                         </div>
-                        <ul class="text-lg text-slate-800 dark:text-slate-100 space-y-4 font-bold">
+                        <ul class="text-base md:text-lg text-slate-800 dark:text-slate-100 space-y-4 font-bold">
                             <li class="flex items-start gap-3"><span class="w-2 h-2 bg-pink-500 rounded-full mt-2.5 shrink-0"></span><span><strong>Điện sinh lí:</strong> Điện thế tế bào, xung thần kinh.</span></li>
                             <li class="flex items-start gap-3"><span class="w-2 h-2 bg-pink-500 rounded-full mt-2.5 shrink-0"></span><span><strong>Cơ học:</strong> Chuyển động khớp, cân bằng.</span></li>
                             <li class="flex items-start gap-3"><span class="w-2 h-2 bg-pink-500 rounded-full mt-2.5 shrink-0"></span><span><strong>Quang học:</strong> Tương tác ánh sáng với mô.</span></li>
@@ -414,12 +410,12 @@
 
                 <!-- Card 2: Chẩn Đoán -->
                 <div class="tilt-card group h-full reveal rainbow-card" style="transition-delay: 100ms;" data-cursor="hover">
-                    <div class="bg-white/95 dark:bg-slate-900/95 p-8 rounded-[2rem] shadow-xl border-l-8 border-blue-500 h-full relative overflow-hidden card-shimmer">
+                    <div class="bg-white/95 dark:bg-slate-900/95 p-6 md:p-8 rounded-[2rem] shadow-xl border-l-8 border-blue-500 h-full relative overflow-hidden card-shimmer">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl"><i class="ph-fill ph-magnifying-glass"></i></div>
-                            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">2. Công Nghệ Chẩn Đoán</h3>
+                            <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">2. Công Nghệ Chẩn Đoán</h3>
                         </div>
-                        <div class="grid grid-cols-2 gap-4 text-base font-bold text-slate-800 dark:text-slate-100">
+                        <div class="grid grid-cols-2 gap-4 text-sm md:text-base font-bold text-slate-800 dark:text-slate-100">
                             <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors shadow-sm"><strong>X-quang:</strong> Hình ảnh xương, phổi.</div>
                             <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors shadow-sm"><strong>CT-Scan:</strong> Lát cắt chi tiết.</div>
                             <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors shadow-sm"><strong>MRI:</strong> Mô mềm (từ trường).</div>
@@ -430,12 +426,12 @@
 
                 <!-- Card 3: Điều Trị -->
                 <div class="tilt-card group h-full reveal rainbow-card" style="transition-delay: 200ms;" data-cursor="hover">
-                    <div class="bg-white/95 dark:bg-slate-900/95 p-8 rounded-[2rem] shadow-xl border-l-8 border-green-500 h-full relative overflow-hidden card-shimmer">
+                    <div class="bg-white/95 dark:bg-slate-900/95 p-6 md:p-8 rounded-[2rem] shadow-xl border-l-8 border-green-500 h-full relative overflow-hidden card-shimmer">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 text-2xl"><i class="ph-fill ph-link"></i></div>
-                            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">3. Công Nghệ Điều Trị</h3>
+                            <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">3. Công Nghệ Điều Trị</h3>
                         </div>
-                        <ul class="text-lg text-slate-800 dark:text-slate-100 space-y-4 font-bold">
+                        <ul class="text-base md:text-lg text-slate-800 dark:text-slate-100 space-y-4 font-bold">
                             <li class="flex items-start gap-3"><span class="w-2 h-2 bg-green-500 rounded-full mt-2.5 shrink-0"></span><span><strong>Laser y học:</strong> Mổ mắt LASIK, nha khoa.</span></li>
                             <li class="flex items-start gap-3"><span class="w-2 h-2 bg-green-500 rounded-full mt-2.5 shrink-0"></span><span><strong>Xạ trị:</strong> Tiêu diệt ung thư (Gamma, Proton).</span></li>
                             <li class="flex items-start gap-3"><span class="w-2 h-2 bg-green-500 rounded-full mt-2.5 shrink-0"></span><span><strong>Siêu âm trị liệu:</strong> Giảm đau, hồi phục mô.</span></li>
@@ -446,12 +442,12 @@
 
                 <!-- Card 4: Mô Phỏng -->
                 <div class="tilt-card group h-full reveal rainbow-card" style="transition-delay: 300ms;" data-cursor="hover">
-                    <div class="bg-white/95 dark:bg-slate-900/95 p-8 rounded-[2rem] shadow-xl border-l-8 border-purple-500 h-full relative overflow-hidden card-shimmer">
+                    <div class="bg-white/95 dark:bg-slate-900/95 p-6 md:p-8 rounded-[2rem] shadow-xl border-l-8 border-purple-500 h-full relative overflow-hidden card-shimmer">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-full flex items-center justify-center text-purple-600 dark:text-purple-400 text-2xl"><i class="ph-fill ph-cpu"></i></div>
-                            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">4. Mô Phỏng & Hỗ Trợ</h3>
+                            <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">4. Mô Phỏng & Hỗ Trợ</h3>
                         </div>
-                        <div class="space-y-6 text-lg text-slate-800 dark:text-slate-100 font-bold">
+                        <div class="space-y-6 text-base md:text-lg text-slate-800 dark:text-slate-100 font-bold">
                             <p class="leading-relaxed">Mô phỏng cấu trúc phân tử, AI phân tích ảnh y khoa.</p>
                             <p class="leading-relaxed"><strong>Thiết bị:</strong> Máy thở, Monitor, Cảm biến SpO₂, Công nghệ Nano.</p>
                         </div>
@@ -462,60 +458,60 @@
     </section>
 
     <!-- III. TRẢI NGHIỆM THỰC TẾ -->
-    <section id="examples" class="py-32 px-4">
+    <section id="examples" class="py-16 md:py-32 px-4">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-extrabold mb-16 text-center text-slate-900 dark:text-white reveal">Trải Nghiệm Tương Tác 🧪</h2>
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-12 md:mb-16 text-center text-slate-900 dark:text-white reveal">Trải Nghiệm Tương Tác 🧪</h2>
             
-            <div class="grid lg:grid-cols-3 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                 <!-- 1. ECG Canvas -->
                 <div class="tilt-card reveal rainbow-card">
-                    <div class="glass p-8 rounded-[2rem] bg-white/95 dark:bg-slate-800/95 h-full flex flex-col">
+                    <div class="glass p-6 md:p-8 rounded-[2rem] bg-white/95 dark:bg-slate-800/95 h-full flex flex-col">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-extrabold text-2xl text-slate-900 dark:text-white flex items-center gap-3"><i class="ph-fill ph-activity text-green-500 text-3xl"></i> ECG</h3>
-                            <span class="bg-green-100 text-green-700 text-sm font-extrabold px-3 py-1.5 rounded-lg animate-pulse">LIVE</span>
+                            <h3 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white flex items-center gap-3"><i class="ph-fill ph-activity text-green-500 text-2xl md:text-3xl"></i> ECG</h3>
+                            <span class="bg-green-100 text-green-700 text-xs md:text-sm font-extrabold px-3 py-1.5 rounded-lg animate-pulse">LIVE</span>
                         </div>
-                        <div class="bg-black rounded-2xl h-56 w-full relative overflow-hidden mb-6 shadow-2xl">
+                        <div class="bg-black rounded-2xl h-48 md:h-56 w-full relative overflow-hidden mb-6 shadow-2xl">
                             <canvas id="ecgCanvas" width="350" height="224" class="w-full h-full"></canvas>
-                            <div class="absolute top-3 right-3 text-green-400 font-mono text-base font-bold bg-black/50 px-2 rounded">HR: 75 BPM</div>
+                            <div class="absolute top-3 right-3 text-green-400 font-mono text-sm md:text-base font-bold bg-black/50 px-2 rounded">HR: 75 BPM</div>
                         </div>
-                        <p class="text-lg text-slate-700 dark:text-slate-300 font-medium mt-auto">Điện tâm đồ ghi lại hoạt động điện của tim. Giúp phát hiện rối loạn nhịp tim.</p>
+                        <p class="text-base md:text-lg text-slate-700 dark:text-slate-300 font-medium mt-auto">Điện tâm đồ ghi lại hoạt động điện của tim. Giúp phát hiện rối loạn nhịp tim.</p>
                     </div>
                 </div>
 
                 <!-- 2. X-Ray Comparison -->
                 <div class="tilt-card reveal rainbow-card" style="transition-delay: 100ms;">
-                    <div class="glass p-8 rounded-[2rem] bg-white/95 dark:bg-slate-800/95 h-full flex flex-col">
+                    <div class="glass p-6 md:p-8 rounded-[2rem] bg-white/95 dark:bg-slate-800/95 h-full flex flex-col">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-extrabold text-2xl text-slate-900 dark:text-white flex items-center gap-3"><i class="ph-fill ph-bone text-blue-500 text-3xl"></i> X-Quang</h3>
+                            <h3 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white flex items-center gap-3"><i class="ph-fill ph-bone text-blue-500 text-2xl md:text-3xl"></i> X-Quang</h3>
                         </div>
-                        <div class="slider-container mb-6 group shadow-2xl h-56 rounded-2xl" id="sliderContainer" data-cursor="hover">
+                        <div class="slider-container mb-6 group shadow-2xl h-48 md:h-56 rounded-2xl" id="sliderContainer" data-cursor="hover">
                             <div class="img-layer" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop');"></div>
                             <div class="img-layer" id="imgForeground" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop'); filter: invert(100%) grayscale(100%) contrast(1.5); clip-path: inset(0 50% 0 0);"></div>
                             <div class="slider-handle" style="left: 50%" id="sliderHandle">
                                 <div class="slider-button"><i class="ph-bold ph-arrows-left-right"></i></div>
                             </div>
-                            <div class="absolute bottom-3 left-3 bg-black/70 text-white text-sm font-bold px-3 py-1 rounded-lg backdrop-blur">Thường</div>
-                            <div class="absolute bottom-3 right-3 bg-blue-600/80 text-white text-sm font-bold px-3 py-1 rounded-lg backdrop-blur">X-Ray</div>
+                            <div class="absolute bottom-3 left-3 bg-black/70 text-white text-xs md:text-sm font-bold px-3 py-1 rounded-lg backdrop-blur">Thường</div>
+                            <div class="absolute bottom-3 right-3 bg-blue-600/80 text-white text-xs md:text-sm font-bold px-3 py-1 rounded-lg backdrop-blur">X-Ray</div>
                         </div>
-                        <p class="text-lg text-slate-700 dark:text-slate-300 font-medium mt-auto">Kéo thanh trượt để xem cách tia X nhìn xuyên qua mô mềm để hiện rõ xương.</p>
+                        <p class="text-base md:text-lg text-slate-700 dark:text-slate-300 font-medium mt-auto">Kéo thanh trượt để xem cách tia X nhìn xuyên qua mô mềm để hiện rõ xương.</p>
                     </div>
                 </div>
 
                 <!-- 3. PCR Simulation -->
                 <div class="tilt-card reveal rainbow-card" style="transition-delay: 200ms;">
-                    <div class="glass p-8 rounded-[2rem] bg-white/95 dark:bg-slate-800/95 h-full flex flex-col">
+                    <div class="glass p-6 md:p-8 rounded-[2rem] bg-white/95 dark:bg-slate-800/95 h-full flex flex-col">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-extrabold text-2xl text-slate-900 dark:text-white flex items-center gap-3"><i class="ph-fill ph-dna text-purple-500 text-3xl"></i> PCR</h3>
+                            <h3 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white flex items-center gap-3"><i class="ph-fill ph-dna text-purple-500 text-2xl md:text-3xl"></i> PCR</h3>
                         </div>
-                        <div class="bg-slate-900 rounded-2xl h-56 w-full relative flex items-center justify-center overflow-hidden cursor-none group mb-6 shadow-2xl" onclick="togglePCR()" data-cursor="hover">
+                        <div class="bg-slate-900 rounded-2xl h-48 md:h-56 w-full relative flex items-center justify-center overflow-hidden cursor-none group mb-6 shadow-2xl" onclick="togglePCR()" data-cursor="hover">
                             <div id="pcrStart" class="text-center group-hover:scale-110 transition-transform z-10">
-                                <i class="ph-fill ph-play-circle text-6xl text-purple-400 mb-2 drop-shadow-lg"></i>
-                                <p class="text-sm text-purple-100 font-bold uppercase tracking-wider bg-purple-900/50 px-3 py-1 rounded-full">Chạy mô phỏng</p>
+                                <i class="ph-fill ph-play-circle text-5xl md:text-6xl text-purple-400 mb-2 drop-shadow-lg"></i>
+                                <p class="text-xs md:text-sm text-purple-100 font-bold uppercase tracking-wider bg-purple-900/50 px-3 py-1 rounded-full">Chạy mô phỏng</p>
                             </div>
                             <div id="dnaContainer" class="absolute inset-0 flex flex-wrap items-center justify-center gap-3 p-4 hidden bg-black/60 backdrop-blur-sm z-20"></div>
-                            <i class="ph-duotone ph-dna text-[10rem] absolute opacity-20 text-purple-500 rotate-12"></i>
+                            <i class="ph-duotone ph-dna text-[8rem] md:text-[10rem] absolute opacity-20 text-purple-500 rotate-12"></i>
                         </div>
-                        <p class="text-lg text-slate-700 dark:text-slate-300 font-medium mt-auto">Phản ứng chuỗi Polymerase giúp nhân bản đoạn DNA lên hàng triệu lần.</p>
+                        <p class="text-base md:text-lg text-slate-700 dark:text-slate-300 font-medium mt-auto">Phản ứng chuỗi Polymerase giúp nhân bản đoạn DNA lên hàng triệu lần.</p>
                     </div>
                 </div>
             </div>
@@ -523,63 +519,63 @@
     </section>
 
     <!-- IV. CÔNG NGHỆ MỚI -->
-    <section id="tech" class="py-32 px-4 bg-slate-900 text-white relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-teal-500/10 rounded-full blur-[150px]"></div>
-        <div class="absolute bottom-0 left-0 w-[800px] h-[800px] bg-purple-500/10 rounded-full blur-[150px]"></div>
+    <section id="tech" class="py-16 md:py-32 px-4 bg-slate-900 text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[500px] md:w-[800px] h-[500px] md:h-[800px] bg-teal-500/10 rounded-full blur-[100px] md:blur-[150px]"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] md:w-[800px] h-[500px] md:h-[800px] bg-purple-500/10 rounded-full blur-[100px] md:blur-[150px]"></div>
 
         <div class="max-w-7xl mx-auto relative z-10">
-            <div class="text-center mb-20 reveal">
-                <h2 class="text-5xl font-extrabold mb-6">Công Nghệ Tương Lai 🚀</h2>
-                <p class="text-slate-300 text-xl font-medium max-w-3xl mx-auto">Những bước tiến đột phá thay đổi nền y học thế giới, đưa khoa học giả tưởng thành hiện thực.</p>
+            <div class="text-center mb-12 md:mb-20 reveal">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 md:mb-6">Công Nghệ Tương Lai 🚀</h2>
+                <p class="text-slate-300 text-lg md:text-xl font-medium max-w-3xl mx-auto">Những bước tiến đột phá thay đổi nền y học thế giới, đưa khoa học giả tưởng thành hiện thực.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                 <!-- Tech Items -->
-                <div class="group relative h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" data-cursor="hover">
+                <div class="group relative h-64 md:h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" data-cursor="hover">
                     <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=600" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-8 flex flex-col justify-end">
-                        <h3 class="text-3xl font-extrabold text-teal-300 mb-3 drop-shadow-md">AI Chẩn Đoán</h3>
-                        <p class="text-lg text-gray-200 font-medium leading-relaxed">Phân tích X-quang, CT nhanh và chính xác hơn mắt người.</p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-6 md:p-8 flex flex-col justify-end">
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-teal-300 mb-2 md:mb-3 drop-shadow-md">AI Chẩn Đoán</h3>
+                        <p class="text-base md:text-lg text-gray-200 font-medium leading-relaxed">Phân tích X-quang, CT nhanh và chính xác hơn mắt người.</p>
                     </div>
                 </div>
 
-                <div class="group relative h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" style="transition-delay: 100ms" data-cursor="hover">
+                <div class="group relative h-64 md:h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" style="transition-delay: 100ms" data-cursor="hover">
                     <img src="https://www.mediplus.vn/wp-content/uploads/2022/03/hinh-anh-sieu-am-5d.jpg" onerror="this.src='https://images.unsplash.com/photo-1559757620-a3962f75a3bc?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-8 flex flex-col justify-end">
-                        <h3 class="text-3xl font-extrabold text-teal-300 mb-3 drop-shadow-md">Siêu Âm 5D</h3>
-                        <p class="text-lg text-gray-200 font-medium leading-relaxed">Hình ảnh thai nhi sắc nét, sống động như thật.</p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-6 md:p-8 flex flex-col justify-end">
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-teal-300 mb-2 md:mb-3 drop-shadow-md">Siêu Âm 5D</h3>
+                        <p class="text-base md:text-lg text-gray-200 font-medium leading-relaxed">Hình ảnh thai nhi sắc nét, sống động như thật.</p>
                     </div>
                 </div>
 
-                <div class="group relative h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" style="transition-delay: 200ms" data-cursor="hover">
+                <div class="group relative h-64 md:h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" style="transition-delay: 200ms" data-cursor="hover">
                     <img src="https://images.ctfassets.net/iujm5coq335o/5rhKYgu0WNENWwMDBkO4BT/d943b0e68a9dd79e627af6943634bb2c/-ENT2023-07-_Image_2.jpg?fm=webp" onerror="this.src='https://images.unsplash.com/photo-1516549881627-280122c5ae7d?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-8 flex flex-col justify-end">
-                        <h3 class="text-3xl font-extrabold text-teal-300 mb-3 drop-shadow-md">MRI 7 Tesla</h3>
-                        <p class="text-lg text-gray-200 font-medium leading-relaxed">Từ trường siêu mạnh cho hình ảnh não cực kỳ chi tiết.</p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-6 md:p-8 flex flex-col justify-end">
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-teal-300 mb-2 md:mb-3 drop-shadow-md">MRI 7 Tesla</h3>
+                        <p class="text-base md:text-lg text-gray-200 font-medium leading-relaxed">Từ trường siêu mạnh cho hình ảnh não cực kỳ chi tiết.</p>
                     </div>
                 </div>
 
-                <div class="group relative h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" data-cursor="hover">
+                <div class="group relative h-64 md:h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" data-cursor="hover">
                     <img src="https://i.ex-cdn.com/vovgiaothong.vn/files/content/2024/03/22/xa-tri-proton-2100-ty-1308.jpg" onerror="this.src='https://images.unsplash.com/photo-1632053003260-496620589a1c?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-8 flex flex-col justify-end">
-                        <h3 class="text-3xl font-extrabold text-teal-300 mb-3 drop-shadow-md">Xạ Trị Proton</h3>
-                        <p class="text-lg text-gray-200 font-medium leading-relaxed">Tiêu diệt ung thư chính xác, ít hại mô lành.</p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-6 md:p-8 flex flex-col justify-end">
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-teal-300 mb-2 md:mb-3 drop-shadow-md">Xạ Trị Proton</h3>
+                        <p class="text-base md:text-lg text-gray-200 font-medium leading-relaxed">Tiêu diệt ung thư chính xác, ít hại mô lành.</p>
                     </div>
                 </div>
 
-                <div class="group relative h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" style="transition-delay: 100ms" data-cursor="hover">
+                <div class="group relative h-64 md:h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" style="transition-delay: 100ms" data-cursor="hover">
                     <img src="https://plus.unsplash.com/premium_photo-1682124651258-410b25fa9dc0?q=80&w=600" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-8 flex flex-col justify-end">
-                        <h3 class="text-3xl font-extrabold text-teal-300 mb-3 drop-shadow-md">Robot Phẫu Thuật</h3>
-                        <p class="text-lg text-gray-200 font-medium leading-relaxed">Độ chính xác cao, giảm mất máu, hồi phục nhanh.</p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-6 md:p-8 flex flex-col justify-end">
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-teal-300 mb-2 md:mb-3 drop-shadow-md">Robot Phẫu Thuật</h3>
+                        <p class="text-base md:text-lg text-gray-200 font-medium leading-relaxed">Độ chính xác cao, giảm mất máu, hồi phục nhanh.</p>
                     </div>
                 </div>
 
-                <div class="group relative h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" style="transition-delay: 200ms" data-cursor="hover">
+                <div class="group relative h-64 md:h-80 rounded-[2rem] overflow-hidden shadow-2xl reveal cursor-none card-shimmer rainbow-card" style="transition-delay: 200ms" data-cursor="hover">
                     <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=600" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-8 flex flex-col justify-end">
-                        <h3 class="text-3xl font-extrabold text-teal-300 mb-3 drop-shadow-md">Cảm Biến Đeo</h3>
-                        <p class="text-lg text-gray-200 font-medium leading-relaxed">Theo dõi SpO₂, ECG liên tục 24/7.</p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent p-6 md:p-8 flex flex-col justify-end">
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-teal-300 mb-2 md:mb-3 drop-shadow-md">Cảm Biến Đeo</h3>
+                        <p class="text-base md:text-lg text-gray-200 font-medium leading-relaxed">Theo dõi SpO₂, ECG liên tục 24/7.</p>
                     </div>
                 </div>
             </div>
@@ -587,76 +583,76 @@
     </section>
 
     <!-- V. HỌC TẬP (Youtube) -->
-    <section id="youtube" class="py-32 px-4 bg-white/80 dark:bg-slate-800/80 rounded-[4rem] mx-4 mt-12 shadow-inner backdrop-blur-sm">
+    <section id="youtube" class="py-16 md:py-32 px-4 bg-white/80 dark:bg-slate-800/80 rounded-[3rem] md:rounded-[4rem] mx-2 md:mx-4 mt-8 md:mt-12 shadow-inner backdrop-blur-sm">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-extrabold mb-16 text-center text-slate-900 dark:text-white reveal">Góc Học Tập Youtube 📺</h2>
-            <div class="grid md:grid-cols-3 gap-10">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-12 md:mb-16 text-center text-slate-900 dark:text-white reveal">Góc Học Tập Youtube 📺</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
                 <!-- Channel 1 -->
-                <a href="https://www.youtube.com/user/armandohasudungan" target="_blank" class="tilt-card glass p-10 rounded-[2.5rem] text-center hover:bg-white dark:hover:bg-slate-700 transition-colors reveal group bg-white/95 dark:bg-slate-800/95 rainbow-card" data-cursor="hover">
-                    <div class="w-24 h-24 mx-auto bg-red-100 rounded-full flex items-center justify-center text-red-500 text-4xl mb-6 group-hover:scale-110 transition-transform shadow-md"><i class="ph-fill ph-pencil-circle"></i></div>
-                    <h3 class="font-extrabold text-2xl text-slate-900 dark:text-white">Armando Hasudungan</h3>
-                    <p class="text-lg text-slate-600 dark:text-slate-300 mt-3 font-medium">Video y khoa vẽ tay sống động.</p>
+                <a href="https://www.youtube.com/user/armandohasudungan" target="_blank" class="tilt-card glass p-8 md:p-10 rounded-[2.5rem] text-center hover:bg-white dark:hover:bg-slate-700 transition-colors reveal group bg-white/95 dark:bg-slate-800/95 rainbow-card" data-cursor="hover">
+                    <div class="w-20 h-20 md:w-24 md:h-24 mx-auto bg-red-100 rounded-full flex items-center justify-center text-red-500 text-3xl md:text-4xl mb-4 md:mb-6 group-hover:scale-110 transition-transform shadow-md"><i class="ph-fill ph-pencil-circle"></i></div>
+                    <h3 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white">Armando Hasudungan</h3>
+                    <p class="text-base md:text-lg text-slate-600 dark:text-slate-300 mt-2 md:mt-3 font-medium">Video y khoa vẽ tay sống động.</p>
                 </a>
                 <!-- Channel 2 -->
-                <a href="https://www.youtube.com/c/osmosis" target="_blank" class="tilt-card glass p-10 rounded-[2.5rem] text-center hover:bg-white dark:hover:bg-slate-700 transition-colors reveal group bg-white/95 dark:bg-slate-800/95 rainbow-card" style="transition-delay: 100ms" data-cursor="hover">
-                    <div class="w-24 h-24 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-blue-500 text-4xl mb-6 group-hover:scale-110 transition-transform shadow-md"><i class="ph-fill ph-drop"></i></div>
-                    <h3 class="font-extrabold text-2xl text-slate-900 dark:text-white">Osmosis</h3>
-                    <p class="text-lg text-slate-600 dark:text-slate-300 mt-3 font-medium">Giáo dục y tế trực quan hàng đầu.</p>
+                <a href="https://www.youtube.com/c/osmosis" target="_blank" class="tilt-card glass p-8 md:p-10 rounded-[2.5rem] text-center hover:bg-white dark:hover:bg-slate-700 transition-colors reveal group bg-white/95 dark:bg-slate-800/95 rainbow-card" style="transition-delay: 100ms" data-cursor="hover">
+                    <div class="w-20 h-20 md:w-24 md:h-24 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-blue-500 text-3xl md:text-4xl mb-4 md:mb-6 group-hover:scale-110 transition-transform shadow-md"><i class="ph-fill ph-drop"></i></div>
+                    <h3 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white">Osmosis</h3>
+                    <p class="text-base md:text-lg text-slate-600 dark:text-slate-300 mt-2 md:mt-3 font-medium">Giáo dục y tế trực quan hàng đầu.</p>
                 </a>
                 <!-- Channel 3 -->
-                <a href="https://www.youtube.com/c/Anatomyzone" target="_blank" class="tilt-card glass p-10 rounded-[2.5rem] text-center hover:bg-white dark:hover:bg-slate-700 transition-colors reveal group bg-white/95 dark:bg-slate-800/95 rainbow-card" style="transition-delay: 200ms" data-cursor="hover">
-                    <div class="w-24 h-24 mx-auto bg-purple-100 rounded-full flex items-center justify-center text-purple-500 text-4xl mb-6 group-hover:scale-110 transition-transform shadow-md"><i class="ph-fill ph-cube"></i></div>
-                    <h3 class="font-extrabold text-2xl text-slate-900 dark:text-white">AnatomyZone</h3>
-                    <p class="text-lg text-slate-600 dark:text-slate-300 mt-3 font-medium">Hướng dẫn giải phẫu 3D chi tiết.</p>
+                <a href="https://www.youtube.com/c/Anatomyzone" target="_blank" class="tilt-card glass p-8 md:p-10 rounded-[2.5rem] text-center hover:bg-white dark:hover:bg-slate-700 transition-colors reveal group bg-white/95 dark:bg-slate-800/95 rainbow-card" style="transition-delay: 200ms" data-cursor="hover">
+                    <div class="w-20 h-20 md:w-24 md:h-24 mx-auto bg-purple-100 rounded-full flex items-center justify-center text-purple-500 text-3xl md:text-4xl mb-4 md:mb-6 group-hover:scale-110 transition-transform shadow-md"><i class="ph-fill ph-cube"></i></div>
+                    <h3 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white">AnatomyZone</h3>
+                    <p class="text-base md:text-lg text-slate-600 dark:text-slate-300 mt-2 md:mt-3 font-medium">Hướng dẫn giải phẫu 3D chi tiết.</p>
                 </a>
             </div>
         </div>
     </section>
 
     <!-- VI. NGHỀ NGHIỆP (Careers) -->
-    <section id="careers" class="py-32 px-4">
+    <section id="careers" class="py-16 md:py-32 px-4">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-extrabold mb-16 text-center text-slate-900 dark:text-white reveal">Tương Lai Nghề Nghiệp 💼</h2>
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-12 md:mb-16 text-center text-slate-900 dark:text-white reveal">Tương Lai Nghề Nghiệp 💼</h2>
             
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="glass p-8 rounded-[2rem] text-center border-t-8 border-blue-500 hover:-translate-y-2 transition-transform reveal bg-white/95 dark:bg-slate-800/95 card-shimmer shadow-lg rainbow-card" data-cursor="hover">
-                    <i class="ph-bold ph-hospital text-6xl text-blue-500 mb-6 block"></i>
-                    <h4 class="font-extrabold text-2xl text-slate-900 dark:text-white">Bệnh Viện</h4>
-                    <p class="text-lg text-slate-700 dark:text-slate-300 mt-3 font-semibold">Vận hành máy MRI/CT, Kỹ sư thiết bị.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+                <div class="glass p-6 md:p-8 rounded-[2rem] text-center border-t-8 border-blue-500 hover:-translate-y-2 transition-transform reveal bg-white/95 dark:bg-slate-800/95 card-shimmer shadow-lg rainbow-card" data-cursor="hover">
+                    <i class="ph-bold ph-hospital text-5xl md:text-6xl text-blue-500 mb-4 md:mb-6 block"></i>
+                    <h4 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white">Bệnh Viện</h4>
+                    <p class="text-base md:text-lg text-slate-700 dark:text-slate-300 mt-2 md:mt-3 font-semibold">Vận hành máy MRI/CT, Kỹ sư thiết bị.</p>
                 </div>
-                <div class="glass p-8 rounded-[2rem] text-center border-t-8 border-green-500 hover:-translate-y-2 transition-transform reveal bg-white/95 dark:bg-slate-800/95 card-shimmer shadow-lg rainbow-card" style="transition-delay: 100ms" data-cursor="hover">
-                    <i class="ph-bold ph-flask text-6xl text-green-500 mb-6 block"></i>
-                    <h4 class="font-extrabold text-2xl text-slate-900 dark:text-white">Viện Nghiên Cứu</h4>
-                    <p class="text-lg text-slate-700 dark:text-slate-300 mt-3 font-semibold">Nghiên cứu mô, phát triển kỹ thuật mới.</p>
+                <div class="glass p-6 md:p-8 rounded-[2rem] text-center border-t-8 border-green-500 hover:-translate-y-2 transition-transform reveal bg-white/95 dark:bg-slate-800/95 card-shimmer shadow-lg rainbow-card" style="transition-delay: 100ms" data-cursor="hover">
+                    <i class="ph-bold ph-flask text-5xl md:text-6xl text-green-500 mb-4 md:mb-6 block"></i>
+                    <h4 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white">Viện Nghiên Cứu</h4>
+                    <p class="text-base md:text-lg text-slate-700 dark:text-slate-300 mt-2 md:mt-3 font-semibold">Nghiên cứu mô, phát triển kỹ thuật mới.</p>
                 </div>
-                <div class="glass p-8 rounded-[2rem] text-center border-t-8 border-purple-500 hover:-translate-y-2 transition-transform reveal bg-white/95 dark:bg-slate-800/95 card-shimmer shadow-lg rainbow-card" style="transition-delay: 200ms" data-cursor="hover">
-                    <i class="ph-bold ph-factory text-6xl text-purple-500 mb-6 block"></i>
-                    <h4 class="font-extrabold text-2xl text-slate-900 dark:text-white">Công Ty Y Khoa</h4>
-                    <p class="text-lg text-slate-700 dark:text-slate-300 mt-3 font-semibold">Thiết kế, sản xuất thiết bị y tế.</p>
+                <div class="glass p-6 md:p-8 rounded-[2rem] text-center border-t-8 border-purple-500 hover:-translate-y-2 transition-transform reveal bg-white/95 dark:bg-slate-800/95 card-shimmer shadow-lg rainbow-card" style="transition-delay: 200ms" data-cursor="hover">
+                    <i class="ph-bold ph-factory text-5xl md:text-6xl text-purple-500 mb-4 md:mb-6 block"></i>
+                    <h4 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white">Công Ty Y Khoa</h4>
+                    <p class="text-base md:text-lg text-slate-700 dark:text-slate-300 mt-2 md:mt-3 font-semibold">Thiết kế, sản xuất thiết bị y tế.</p>
                 </div>
-                <div class="glass p-8 rounded-[2rem] text-center border-t-8 border-orange-500 hover:-translate-y-2 transition-transform reveal bg-white/95 dark:bg-slate-800/95 card-shimmer shadow-lg rainbow-card" style="transition-delay: 300ms" data-cursor="hover">
-                    <i class="ph-bold ph-shield-check text-6xl text-orange-500 mb-6 block"></i>
-                    <h4 class="font-extrabold text-2xl text-slate-900 dark:text-white">Quản Lý</h4>
-                    <p class="text-lg text-slate-700 dark:text-slate-300 mt-3 font-semibold">An toàn bức xạ, cấp phép thiết bị.</p>
+                <div class="glass p-6 md:p-8 rounded-[2rem] text-center border-t-8 border-orange-500 hover:-translate-y-2 transition-transform reveal bg-white/95 dark:bg-slate-800/95 card-shimmer shadow-lg rainbow-card" style="transition-delay: 300ms" data-cursor="hover">
+                    <i class="ph-bold ph-shield-check text-5xl md:text-6xl text-orange-500 mb-4 md:mb-6 block"></i>
+                    <h4 class="font-extrabold text-xl md:text-2xl text-slate-900 dark:text-white">Quản Lý</h4>
+                    <p class="text-base md:text-lg text-slate-700 dark:text-slate-300 mt-2 md:mt-3 font-semibold">An toàn bức xạ, cấp phép thiết bị.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- VII. THẢO LUẬN -->
-    <section id="discussion" class="py-32 px-4">
+    <section id="discussion" class="py-16 md:py-32 px-4">
         <div class="max-w-5xl mx-auto reveal">
-            <div class="relative bg-gradient-to-r from-amber-100 to-orange-100 dark:from-slate-800 dark:to-slate-700 rounded-[3rem] p-12 md:p-20 text-center overflow-hidden shadow-2xl border border-orange-200/50 dark:border-slate-600">
-                <div class="absolute top-0 right-0 p-10 opacity-10"><i class="ph-fill ph-chat-circle-dots text-[12rem] text-orange-500 dark:text-white"></i></div>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-10 relative z-10">Góc Thảo Luận 🗣️</h2>
-                <div class="bg-white/90 dark:bg-black/60 p-10 rounded-[2rem] backdrop-blur-md relative z-10 mb-10 max-w-3xl mx-auto text-left shadow-lg border border-white/50 dark:border-slate-500">
-                    <p class="font-extrabold text-xl text-slate-900 dark:text-white mb-4">Câu hỏi gợi ý:</p>
-                    <ul class="list-disc pl-6 text-slate-800 dark:text-slate-200 space-y-4 text-lg font-semibold">
+            <div class="relative bg-gradient-to-r from-amber-100 to-orange-100 dark:from-slate-800 dark:to-slate-700 rounded-[3rem] p-8 md:p-20 text-center overflow-hidden shadow-2xl border border-orange-200/50 dark:border-slate-600">
+                <div class="absolute top-0 right-0 p-10 opacity-10"><i class="ph-fill ph-chat-circle-dots text-[8rem] md:text-[12rem] text-orange-500 dark:text-white"></i></div>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 md:mb-10 relative z-10">Góc Thảo Luận 🗣️</h2>
+                <div class="bg-white/90 dark:bg-black/60 p-6 md:p-10 rounded-[2rem] backdrop-blur-md relative z-10 mb-8 md:mb-10 max-w-3xl mx-auto text-left shadow-lg border border-white/50 dark:border-slate-500">
+                    <p class="font-extrabold text-lg md:text-xl text-slate-900 dark:text-white mb-4">Câu hỏi gợi ý:</p>
+                    <ul class="list-disc pl-6 text-slate-800 dark:text-slate-200 space-y-4 text-base md:text-lg font-semibold">
                         <li>Bạn ấn tượng nhất với công nghệ nào trong vật lí y sinh? Tại sao?</li>
                         <li>Theo bạn, tương lai y học sẽ phụ thuộc nhiều hơn vào thiết bị hay con người?</li>
                     </ul>
                 </div>
-                <button class="relative z-10 px-12 py-5 bg-orange-500 text-white rounded-full font-bold text-xl shadow-xl hover:bg-orange-600 transition-transform hover:scale-105 magnetic-btn" data-cursor="hover">
+                <button class="relative z-10 px-10 md:px-12 py-4 md:py-5 bg-orange-500 text-white rounded-full font-bold text-lg md:text-xl shadow-xl hover:bg-orange-600 transition-transform hover:scale-105 magnetic-btn" data-cursor="hover">
                     Chia sẻ ý kiến
                 </button>
             </div>
@@ -664,58 +660,58 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-16 text-center text-slate-500">
-        <div class="flex justify-center gap-8 mb-8">
-            <a href="#" class="text-4xl hover:text-teal-500 transition-colors" data-cursor="hover"><i class="ph-bold ph-facebook-logo"></i></a>
-            <a href="#" class="text-4xl hover:text-teal-500 transition-colors" data-cursor="hover"><i class="ph-bold ph-instagram-logo"></i></a>
-            <a href="https://aatroxnocrush.github.io/mywebsite/" target="_blank" class="text-4xl hover:text-teal-500 transition-colors" data-cursor="hover"><i class="ph-bold ph-globe"></i></a>
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 md:py-16 text-center text-slate-500">
+        <div class="flex justify-center gap-6 md:gap-8 mb-6 md:mb-8">
+            <a href="#" class="text-3xl md:text-4xl hover:text-teal-500 transition-colors" data-cursor="hover"><i class="ph-bold ph-facebook-logo"></i></a>
+            <a href="#" class="text-3xl md:text-4xl hover:text-teal-500 transition-colors" data-cursor="hover"><i class="ph-bold ph-instagram-logo"></i></a>
+            <a href="https://aatroxnocrush.github.io/mywebsite/" target="_blank" class="text-3xl md:text-4xl hover:text-teal-500 transition-colors" data-cursor="hover"><i class="ph-bold ph-globe"></i></a>
         </div>
-        <p class="font-bold text-base">© 2025 BioPhysics Hub. Designed for Education.</p>
+        <p class="font-bold text-sm md:text-base">© 2025 BioPhysics Hub. Designed for Education.</p>
     </footer>
 
     <!-- AUTHOR MODAL -->
     <div id="author-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center bg-black/80 backdrop-blur-md opacity-0 transition-opacity duration-300">
-        <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] p-10 max-w-4xl w-[95%] shadow-2xl transform scale-95 transition-transform duration-300 border border-white/20 relative">
-            <button onclick="toggleAuthorModal()" class="absolute top-6 right-6 p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full magnetic-btn transition-colors" data-cursor="hover"><i class="ph-bold ph-x text-2xl dark:text-white"></i></button>
+        <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] p-6 md:p-10 max-w-4xl w-[95%] shadow-2xl transform scale-95 transition-transform duration-300 border border-white/20 relative">
+            <button onclick="toggleAuthorModal()" class="absolute top-4 md:top-6 right-4 md:right-6 p-2 md:p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full magnetic-btn transition-colors" data-cursor="hover"><i class="ph-bold ph-x text-xl md:text-2xl dark:text-white"></i></button>
             
             <div class="text-center">
-                <div class="w-24 h-24 bg-gradient-to-tr from-teal-400 to-blue-500 rounded-full mx-auto flex items-center justify-center text-white text-5xl mb-6 shadow-xl animate-float">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-tr from-teal-400 to-blue-500 rounded-full mx-auto flex items-center justify-center text-white text-4xl md:text-5xl mb-4 md:mb-6 shadow-xl animate-float">
                     <i class="ph-fill ph-users-three"></i>
                 </div>
-                <h3 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-3">Nhóm Tác Giả</h3>
-                <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 font-medium">Website Vật Lí Y Sinh</p>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">Nhóm Tác Giả</h3>
+                <p class="text-base md:text-lg text-slate-600 dark:text-slate-400 mb-6 md:mb-8 font-medium">Website Vật Lí Y Sinh</p>
                 
-                <div class="bg-teal-50 dark:bg-teal-900/40 p-5 rounded-2xl mb-8 border border-teal-200 dark:border-teal-700/50">
-                    <p class="text-slate-700 dark:text-slate-300 mb-3 text-base font-bold">Bạn đang tìm phương pháp tự học, hãy ghé thăm dự án của M.Phong nhee:</p>
-                    <a href="https://aatroxnocrush.github.io/mywebsite/" target="_blank" class="text-teal-700 dark:text-teal-400 text-lg font-extrabold hover:underline break-all flex items-center justify-center gap-2 group" data-cursor="hover">
-                        <i class="ph-bold ph-link group-hover:rotate-45 transition-transform"></i> aatroxnocrush.github.io
+                <div class="bg-teal-50 dark:bg-teal-900/40 p-4 md:p-5 rounded-2xl mb-6 md:mb-8 border border-teal-200 dark:border-teal-700/50">
+                    <p class="text-slate-700 dark:text-slate-300 mb-2 md:mb-3 text-sm md:text-base font-bold">Bạn đang tìm phương pháp học hiệu quả? Hãy đến với dự án của M.Phongg :3 :</p>
+                    <a href="https://aatroxnocrush.github.io/mywebsite/" target="_blank" class="text-teal-700 dark:text-teal-400 text-base md:text-lg font-extrabold hover:underline break-all flex items-center justify-center gap-2 group" data-cursor="hover">
+                        <i class="ph-bold ph-link group-hover:rotate-45 transition-transform"></i> https://aatroxnocrush.github.io/mywebsite/
                     </a>
                 </div>
 
                 <!-- FULL LIST DISPLAY (NO SCROLL) -->
-                <div class="bg-slate-50 dark:bg-slate-900/80 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 text-left">
+                <div class="bg-slate-50 dark:bg-slate-900/80 rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 text-left">
                     
                     <!-- Special Member: Centered Top -->
-                    <div class="flex justify-center mb-6">
-                        <div class="flex items-center gap-4 p-3 pr-6 rounded-2xl bg-white dark:bg-slate-800 border-2 border-teal-200 dark:border-teal-700 shadow-lg transform hover:scale-105 transition-transform cursor-pointer group">
-                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-white font-extrabold text-lg shadow-md group-hover:rotate-12 transition-transform">MP</div>
+                    <div class="flex justify-center mb-4 md:mb-6">
+                        <div class="flex items-center gap-3 md:gap-4 p-3 pr-6 rounded-2xl bg-white dark:bg-slate-800 border-2 border-teal-200 dark:border-teal-700 shadow-lg transform hover:scale-105 transition-transform cursor-pointer group">
+                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-white font-extrabold text-base md:text-lg shadow-md group-hover:rotate-12 transition-transform">MP</div>
                             <div>
-                                <span class="block font-extrabold text-xl text-teal-800 dark:text-teal-300">Trần Đình Mạnh Phong</span>
+                                <span class="block font-extrabold text-lg md:text-xl text-teal-800 dark:text-teal-300">Trần Đình Mạnh Phong</span>
                                 <span class="text-xs font-bold text-teal-600 dark:text-teal-500 uppercase tracking-wider">Leader / Developer</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Grid Members -->
-                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 font-extrabold text-base">HĐ</div><span class="font-bold text-lg text-slate-800 dark:text-slate-200">Huỳnh Đình Đang</span></li>
-                        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-extrabold text-base">TH</div><span class="font-bold text-lg text-slate-800 dark:text-slate-200">Đào Trung Hậu</span></li>
-                        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-extrabold text-base">ĐH</div><span class="font-bold text-lg text-slate-800 dark:text-slate-200">Bùi Đức Huy</span></li>
-                        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-extrabold text-base">PH</div><span class="font-bold text-lg text-slate-800 dark:text-slate-200">Nguyễn Phú Hưng</span></li>
-                        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-extrabold text-base">QB</div><span class="font-bold text-lg text-slate-800 dark:text-slate-200">Nguyễn Khắc Quốc Bảo</span></li>
-                        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-extrabold text-base">QN</div><span class="font-bold text-lg text-slate-800 dark:text-slate-200">Đinh Đặng Quỳnh Như</span></li>
-                        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-extrabold text-base">TQ</div><span class="font-bold text-lg text-slate-800 dark:text-slate-200">Trà Thị Thảo Quyên</span></li>
-                        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 font-extrabold text-base">TT</div><span class="font-bold text-lg text-slate-800 dark:text-slate-200">Trịnh Thị Thu Thảo</span></li>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                        <li class="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 font-extrabold text-sm md:text-base">HĐ</div><span class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-200">Huỳnh Đình Đang</span></li>
+                        <li class="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-extrabold text-sm md:text-base">TH</div><span class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-200">Đào Trung Hậu</span></li>
+                        <li class="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-extrabold text-sm md:text-base">ĐH</div><span class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-200">Bùi Đức Huy</span></li>
+                        <li class="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-extrabold text-sm md:text-base">PH</div><span class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-200">Nguyễn Phú Hưng</span></li>
+                        <li class="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-extrabold text-sm md:text-base">QB</div><span class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-200">Nguyễn Khắc Quốc Bảo</span></li>
+                        <li class="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-extrabold text-sm md:text-base">QN</div><span class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-200">Đinh Đặng Quỳnh Như</span></li>
+                        <li class="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-extrabold text-sm md:text-base">TQ</div><span class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-200">Trà Thị Thảo Quyên</span></li>
+                        <li class="flex items-center gap-3 md:gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700 shadow-sm"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 font-extrabold text-sm md:text-base">TT</div><span class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-200">Trịnh Thị Thu Thảo</span></li>
                     </ul>
                 </div>
             </div>
